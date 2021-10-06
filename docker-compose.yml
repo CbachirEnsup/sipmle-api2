@@ -21,6 +21,26 @@ services:
       - 5000:5000
     networks:
       - pozos_network
-
+  p_registry:
+    image : registry:2
+    ports:
+     - 4999:5000
+    environment:
+     - REGISTRY_STORAGE_DELETE_ENABLED=true
+    networks:
+     - registry_network
+  registry_ui:
+    image: joxit/docker-registry-ui:static
+    depends_on:
+     - p_registry
+    networks:
+     - registry_network
+    ports:
+     - 8090:80
+    environment:
+     - REGISTRY8URL=http://private_registry:5000
+     - DELETE_IMAGE=true
+     - REGISTRY_TITLE=CherifBachir
 networks:
-  pozos_network
+  pozos_network:
+  registry_network
